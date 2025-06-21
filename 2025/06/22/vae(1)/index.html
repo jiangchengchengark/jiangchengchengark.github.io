@@ -20,22 +20,22 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="你好，欢迎来到我的博客！ 我是一名来自中国的人工智能工程师，目前就职于一家初创公司，专注于人工智能生成内容（AIGC）和大模型相关的技术研究与应用。 我本科毕业于中国矿业大学（北京），在校期间便对计算机视觉与自然语言处理产生了浓厚兴趣。如今，我主要从事大规模预训练模型、文本生成、图像生成等方向的研发工作。 在这个博客中，我将记录一些工作中的技术总结、工程实践、学习心得，以及对 AI 行业发展的思考">
+  <meta name="description" content="什么是变分自编码器 （VAE） ？VAE是一种生成模型，包含两个子模型：编码器（encoder）和解码器（decoder）。 编码器学习图像数据，将图像数据转换成潜在空间的概率分布（通常为高斯分布），再从这个分布中采样一个潜在向量，作为解码器的输入。解码器从潜在向量上采样重建图像。 一般的vae训练采用端到端的方式训练，输入图像，输出重建过后的图像。 模型主体类似于U-Net结构，使用卷积层和残差">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hello, eyeryone！">
-<meta property="og:url" content="http://example.com/2025/05/24/hello-world/index.html">
+<meta property="og:title" content="VAE学习笔记1">
+<meta property="og:url" content="http://example.com/2025/06/22/vae(1)/index.html">
 <meta property="og:site_name" content="biggod&#39;s blog">
-<meta property="og:description" content="你好，欢迎来到我的博客！ 我是一名来自中国的人工智能工程师，目前就职于一家初创公司，专注于人工智能生成内容（AIGC）和大模型相关的技术研究与应用。 我本科毕业于中国矿业大学（北京），在校期间便对计算机视觉与自然语言处理产生了浓厚兴趣。如今，我主要从事大规模预训练模型、文本生成、图像生成等方向的研发工作。 在这个博客中，我将记录一些工作中的技术总结、工程实践、学习心得，以及对 AI 行业发展的思考">
+<meta property="og:description" content="什么是变分自编码器 （VAE） ？VAE是一种生成模型，包含两个子模型：编码器（encoder）和解码器（decoder）。 编码器学习图像数据，将图像数据转换成潜在空间的概率分布（通常为高斯分布），再从这个分布中采样一个潜在向量，作为解码器的输入。解码器从潜在向量上采样重建图像。 一般的vae训练采用端到端的方式训练，输入图像，输出重建过后的图像。 模型主体类似于U-Net结构，使用卷积层和残差">
 <meta property="og:locale">
-<meta property="article:published_time" content="2025-05-25T03:00:00.000Z">
-<meta property="article:modified_time" content="2025-06-21T18:09:32.988Z">
+<meta property="article:published_time" content="2025-06-23T03:00:00.000Z">
+<meta property="article:modified_time" content="2025-06-21T19:20:52.985Z">
 <meta property="article:author" content="biggod">
-<meta property="article:tag" content="自我介绍">
 <meta property="article:tag" content="AIGC">
-<meta property="article:tag" content="大模型">
+<meta property="article:tag" content="生图">
+<meta property="article:tag" content="vae">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/2025/05/24/hello-world/">
+<link rel="canonical" href="http://example.com/2025/06/22/vae(1)/">
 
 
 <script id="page-configurations">
@@ -48,7 +48,7 @@
   };
 </script>
 
-  <title>hello, eyeryone！ | biggod's blog</title>
+  <title>VAE学习笔记1 | biggod's blog</title>
   
 
 
@@ -178,7 +178,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/05/24/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/22/vae(1)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -191,7 +191,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          hello, eyeryone！
+          VAE学习笔记1
         </h1>
 
         <div class="post-meta">
@@ -201,14 +201,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2025-05-24 20:00:00" itemprop="dateCreated datePublished" datetime="2025-05-24T20:00:00-07:00">2025-05-24</time>
+              <time title="Created: 2025-06-22 20:00:00" itemprop="dateCreated datePublished" datetime="2025-06-22T20:00:00-07:00">2025-06-22</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-21 11:09:32" itemprop="dateModified" datetime="2025-06-21T11:09:32-07:00">2025-06-21</time>
+                <time title="Modified: 2025-06-21 12:20:52" itemprop="dateModified" datetime="2025-06-21T12:20:52-07:00">2025-06-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -216,7 +216,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index"><span itemprop="name">博客</span></a>
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
                 </span>
             </span>
 
@@ -231,14 +231,33 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>你好，欢迎来到我的博客！</p>
-<p>我是一名来自中国的人工智能工程师，目前就职于一家初创公司，专注于人工智能生成内容（AIGC）和大模型相关的技术研究与应用。</p>
-<p>我本科毕业于中国矿业大学（北京），在校期间便对计算机视觉与自然语言处理产生了浓厚兴趣。如今，我主要从事大规模预训练模型、文本生成、图像生成等方向的研发工作。</p>
-<p>在这个博客中，我将记录一些工作中的技术总结、工程实践、学习心得，以及对 AI 行业发展的思考。如果你也对 AIGC、大模型或 AI 工程感兴趣，欢迎一起交流探讨！</p>
-<hr>
-<blockquote>
-<p>Stay hungry, stay curious.</p>
-</blockquote>
+        <h1 id="什么是变分自编码器-（VAE）-？"><a href="#什么是变分自编码器-（VAE）-？" class="headerlink" title="什么是变分自编码器 （VAE） ？"></a>什么是变分自编码器 （VAE） ？</h1><p>VAE是一种生成模型，包含两个子模型：编码器（encoder）和解码器（decoder）。</p>
+<p>编码器学习图像数据，将图像数据转换成潜在空间的概率分布（通常为高斯分布），再从这个分布中采样一个潜在向量，作为解码器的输入。<br>解码器从潜在向量上采样重建图像。</p>
+<p>一般的vae训练采用端到端的方式训练，输入图像，输出重建过后的图像。</p>
+<p>模型主体类似于U-Net结构，使用卷积层和残差神经网络等模块构建对称的解码器和编码器结构。</p>
+<p>训练完毕后的解码器可用于从正态分布采样后（解码器经过训练后，输出的潜在向量接近于正态分布，并且解码器是通过重采样学习，具有良好的噪声鲁棒性，因此可以直接使用正态分布采样），经过一系列变换，输出无条件约束的图像。</p>
+<p>vae的损失函数由两部分组成：</p>
+<p>1、重建损失</p>
+<p>衡量解码器输出与原始输入的相似度，一般使用MSE。可选用其他：L1, BCE等</p>
+<p>聚合方法：像素平均、求和</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">recon_loss=F.mse_loss(recon_x, x, reduction=<span class="string">&#x27;mean&#x27;</span>) <span class="comment"># 重建损失</span></span><br></pre></td></tr></table></figure>
+
+<p>2、L1约束：KL散度</p>
+<p>聚合方法：像素平均、求和</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kl_loss=<span class="number">0.5</span>*torch.mean(<span class="number">1</span>+logvar-mu.<span class="built_in">pow</span>(<span class="number">2</span>)-logvar.exp()) <span class="comment"># KL散度</span></span><br></pre></td></tr></table></figure>
+
+<p>3、总损失</p>
+<p>重建损失和KL约束损失之间是互相对抗的学习，重建损失下降的时候，KL损失会上升，KL损失下降的时候，重建损失会上升。<br>要让模型尽可能达到这两个空间中的平衡最优点，需要为模型建立起有效学习路径，使其充分学习重建能力的同时，让生成的潜在向量尽可能接近正态分布。<br>通过引入一个参数γ，控制KL损失对重建损失的影响。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loss=recon_loss+gamma*kl_loss</span><br></pre></td></tr></table></figure>
+
+<h1 id="退火"><a href="#退火" class="headerlink" title="退火"></a>退火</h1><p>多项实验证明，gamma为1，vae几乎无法建立起重建任务的学习路径，反而一直学习KL损失的下降，导致模型无法重建图像。<br>对于这一个现象的一个解释是潜在变量过于快的变为正态分布，同时编码器学习不充分，重建图像的误差很大，导致解码器很难学习到从单一分布到正确图像的映射路径。</p>
+<p>因此，适当地对gamma进行退火，使模型在训练初期快速学习重建能力，减少模型训练失败的风险。</p>
+<p>一般的退火方法有：</p>
+<p>1、线性退火：γ&#x3D;γ+n∗α, n为迭代次数，α为退火速率,γ初始值在0-0.01之间</p>
+<p>2、循环退火。以n步骤为一个退火周期，在周期内将训练步数分为两个阶段，第一个阶段线性退火使得gamma增加到1，然后第二个阶段保持gamma为1，进入下一个周期时gamma重新设为0。</p>
+<h1 id="相关的优化方法"><a href="#相关的优化方法" class="headerlink" title="相关的优化方法"></a>相关的优化方法</h1><p>1、由于潜在变量最终的形态是正态分布，vae编码器输出和解码器输入的分布类型没有变化，模型的搜索空间在训练后期就只有一种。为使得达到最佳性能，可以为编码器和解码器分别加一个线性层，编码器通过一层线性层输出正态分布的参数，解码器通过一层线性层获得重采样映射后的输入，使得模型可以通过线性层线性变换成自己合适处理的分布。这个方法见于sd1.5的vae部分设计。</p>
+<p>2、如果输入图像已经处理成了(-1,1)区间，那么可以为解码器的最终输出添加tanh激活函数，使分布保持一致，加快收敛。</p>
+<h1 id="训练时注意事项"><a href="#训练时注意事项" class="headerlink" title="训练时注意事项"></a>训练时注意事项</h1><p>1、vae的两个损失函数是对抗关系，因此需要确定合理的退火策略，保证两者训练过程中量级相近。<br>2、数据样本过少时，采用降低vae的潜在向量维度来减小模型可训练权重。<br>3、图像的处理分辨率较大时，潜在向量的维度也要相应增大。</p>
 
     </div>
 
@@ -248,9 +267,9 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D/" rel="tag"># 自我介绍</a>
               <a href="/tags/AIGC/" rel="tag"># AIGC</a>
-              <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" rel="tag"># 大模型</a>
+              <a href="/tags/%E7%94%9F%E5%9B%BE/" rel="tag"># 生图</a>
+              <a href="/tags/vae/" rel="tag"># vae</a>
           </div>
 
         
@@ -258,11 +277,11 @@
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2025/06/22/vae(1)/" rel="next" title="VAE学习笔记1">
-      VAE学习笔记1 <i class="fa fa-chevron-right"></i>
+    <a href="/2025/05/24/hello-world/" rel="prev" title="hello, eyeryone！">
+      <i class="fa fa-chevron-left"></i> hello, eyeryone！
     </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -321,6 +340,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%8F%98%E5%88%86%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8-%EF%BC%88VAE%EF%BC%89-%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">什么是变分自编码器 （VAE） ？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%80%E7%81%AB"><span class="nav-number">2.</span> <span class="nav-text">退火</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E7%9A%84%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">相关的优化方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%97%B6%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">4.</span> <span class="nav-text">训练时注意事项</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
